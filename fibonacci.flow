@@ -1,0 +1,21 @@
+import string;
+
+fac(n : int) -> int { 
+    if (n <= 1) 1 else n * fac(n-1); 
+}
+
+fib(n : int) -> [int] {
+    if (n <= 3) {
+        [0, 1, 1]
+    } 
+    else { 
+        arr : [int] = fib(n-1);
+        concat(arr,[arr[n-2] + arr[n-3]]);
+    }
+}
+
+
+
+main() {
+	println(fib(1));
+}
