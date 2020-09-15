@@ -28,12 +28,10 @@ fib2(n : int) -> [int] {
     }
 }
 
-fibTail(n: int, acc : [int]) -> [int] {
-    if(n <= 2) {
-        acc;
-    }
-    else {
-        fibTail(n-1, concat(acc, [acc[length(acc)-1]+acc[length(acc)-2]]));
+fibTail(n: int, pos: int, acc : ref [int]) -> void {
+    if (pos < n) {
+        acc[pos] := ^acc[pos-2] + ^acc[pos-1]
+        fibTail(n-1, pos+1, acc);
     }
 }
 
