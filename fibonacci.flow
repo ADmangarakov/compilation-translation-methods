@@ -1,15 +1,5 @@
 import string;
 
-// fac(n : int) -> int { 
-//     if (n <= 1) 1 else n * fac(n-1); 
-// }
-
-// fibNum(n : int) -> int {
-//     if(n<=0) 0;
-//     else fibNum(n-1) + fibNum(n-2);
-    
-// }
-
 fib(n : int) -> [int] {
     if (n == 0) {
         [];
@@ -39,23 +29,40 @@ fib2(n : int) -> [int] {
 }
 
 fibTail(n: int, acc : [int]) -> [int] {
-    if(n <= 2)
+    if(n <= 2) {
         acc;
-    else
-        fibTail(n-1, concat(acc, [acc[length(acc)-1]+acc[length(acc)-2]]));
-}
-
-fib3_tail(n: int, acc: ref [int]) -> [int] {
-    if(n <= 2)
-        ^acc;
+    }
     else {
-        fib3_tail(n-1, {
-            refArrayPush(acc, ^acc[length(^acc) - 1] + ^acc[length(^acc) - 2]);
-        })
+        fibTail(n-1, concat(acc, [acc[length(acc)-1]+acc[length(acc)-2]]));
     }
 }
+
+fibib(n: int) -> [int] {
+    fibo(n, ref [], 0);
+}
+
+fibo(n: int, arr: ref [int], len: int) -> [int] {
+    if (n == 0) {
+        ^arr;
+    }
+    else {
+        if (len == 0) {
+            refArrayPush(arr, 0);
+        }
+        else if (len == 1) {
+            refArrayPush(arr, 1);
+        }
+        else {
+            refArrayPush(arr, (^arr)[len - 1] + (^arr)[len - 2]);
+        }
+        fibo(n - 1, arr, len + 1);
+    }
+}
+
+
 
 main() {
     println(fib(10));
 	println(fib2(10));
+    println(fibib(10));
 }
