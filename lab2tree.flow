@@ -1,0 +1,28 @@
+import ds/tree;
+import string;
+
+findidexes(a: [int], i: int, k: int) -> [int] {
+    if (i >= length(a)) []
+    else if (a[i] == k)
+        concat([i], findidexes(a, i+1, k))
+    else
+        findidexes(a, i+1, k);
+}
+
+inds(a: [int], m: int)->[Pair<int, int>] {
+    tree = foldi(a, 
+            makeTree(), 
+            \index, t, value 
+                -> setTree(t, value, arrayPush(
+                    getTreeArrayValue(t, value), index)));
+    foldi(a, [], 
+        \index, acc, value 
+            -> concat(acc, map(getTreeArrayValue(tree, m-value), 
+                \x -> Pair(index, x))));
+}
+
+main() {
+    ints = [3, 2, 1, 4, 4, 2, 1, 5];
+    println(findidexes(ints, 0, 1));
+    println(inds(ints, 8));
+}
