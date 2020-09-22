@@ -1,0 +1,32 @@
+import string;
+import lingo/peg;
+
+
+Str(e: Expr) -> string {
+    switch (e) {
+        IntConst(c): { i2s(c) }
+        Mul(l, r): { "(" + Str(l) + " * " + Str(r) + ")" }
+        Add(l, r): { "(" + Str(l) + " + " + Str(r) + ")" }
+    }
+}
+
+Val(e: Expr) -> int {
+    switch (e : Expr) {
+        Mul(l, r): {Val(l) * Val(r)}
+        Add(l, r): {Val(l) + Val(r)}
+        IntConst(c): {c}
+    }
+}
+
+// Parce(s: string) -> Expr {
+
+// }
+
+main() {
+    expr1 = Mul(IntConst(6), IntConst(7));
+    expr2 = Add(IntConst(6), IntConst(7));
+    expr3 = Add(Mul(IntConst(2), IntConst(3)), IntConst(11));
+    println(Str(expr3));
+    println(Val(expr3));
+    quit(0);
+}

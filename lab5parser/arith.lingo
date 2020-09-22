@@ -1,0 +1,6 @@
+expr = add:a {:a} | mul:m {:m} | int:c {:c};
+add = expr:left ws* "+" ws* expr:right {Add(:left, :right)};
+mul = expr:left ws* "+" ws* expr:right {Mul(:left, :right)};
+int = ('0'-'9')+$d {IntConst(s2i($d))};
+
+ws = ' '*;
