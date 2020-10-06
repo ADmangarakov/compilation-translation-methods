@@ -1,0 +1,49 @@
+import string;
+import ../../../Programs/flow9/lib/lingo/pegcode/driver;
+import lab5grammar;
+
+arithGrammarOp: ref Maybe<[PegOp]> = ref None();
+
+str(e : Expr) -> string {
+	switch(e) {
+		IntConst(c) : {
+			i2s(c);
+		}
+		Mul(l, r) : {
+			"(" + str(l) + " * " + str(r) + ")";
+		}
+		Add(l, r) : {
+			"(" + str(l) + " + " + str(r) + ")";
+		}
+	}
+}
+
+val(e : Expr) -> int {
+	switch(e) {
+		IntConst(c) : {
+			c;
+		}
+		Mul(l, r) : {
+			val(l) * val(r);
+		}
+		Add(l, r) : {
+			val(l) + val(r);
+		}
+	}
+}
+
+initGrammar() {
+	onlyOnce(arithGrammarOp, \ -> {
+		compilePegGrammar("#include sandbox/lab5lingo.lingo");
+	});
+}
+
+main() {
+	result = parsic(initGrammar(), " 1 + 2      *3    ", defaultPegActions);
+
+	println(result);
+	println(str(result));
+	println(val(result));
+
+	quit(0);
+}

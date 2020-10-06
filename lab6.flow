@@ -1,0 +1,89 @@
+import string;
+import lingo/pegcode/driver;
+import sandbox/lab6/lab6grammar;
+
+arithGrammarOp: ref Maybe<[PegOp]> = ref None();
+RPNGrammarOp: ref Maybe<[PegOp]> = ref None();
+
+str(e : Expr) -> string {
+	switch(e) {
+		IntConst(c) : {
+			i2s(c);
+		}
+		Mul(l, r) : {
+			"(" + str(l) + " * " + str(r) + ")";
+		}
+		Add(l, r) : {
+			"(" + str(l) + " + " + str(r) + ")";
+		}
+	}
+}
+
+strRPN(e : Expr) -> string {
+	switch(e) {
+		IntConst(c) : {
+			i2s(c);
+		}
+		Mul(l, r) : {
+			"* " + strRPN(l) + " " + strRPN(r);
+		}
+		Add(l, r) : {
+			"+ " + strRPN(l) + " " + strRPN(r);
+		}
+	}
+}
+
+val(e : Expr) -> int {
+	switch(e) {
+		IntConst(c) : {
+			c;
+		}
+		Mul(l, r) : {
+			val(l) * val(r);
+		}
+		Add(l, r) : {
+			val(l) + val(r);
+		}
+	}
+}
+
+initRPNGrammar() {
+	onlyOnce(RPNGrammarOp, \ -> {
+		compilePegGrammar("#include sandbox/lab6/lab6lingo.lingo");
+	});
+}
+
+initExprGrammar() {
+	onlyOnce(arithGrammarOp, \ -> {
+		compilePegGrammar("#include sandbox/lab5lingo.lingo");
+	});
+}
+
+parse(op: [PegOp], s : string) -> Expr {
+	parsic(op, s, defaultPegActions);
+}
+
+parseExpr(s : string) -> Expr {
+	parse(initExprGrammar(), s);
+}
+
+parseRPN(s : string) -> Expr {
+	parse(initRPNGrammar(), s);
+}
+
+expr2rpn(s : string) -> string {
+	strRPN(parseExpr(s));
+}
+
+rpn2expr(s : string) -> string {
+	result = parseRPN(s);
+	println(result);
+	str(result);
+}
+
+main() {
+	//println(expr2rpn("1+21*33"));
+	println(rpn2expr("+ * 1 21 33"));
+
+	quit(0);
+}
