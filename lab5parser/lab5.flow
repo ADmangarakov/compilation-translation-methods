@@ -1,5 +1,5 @@
 import string;
-import ../../../Programs/flow9/lib/lingo/pegcode/driver;
+import lib/lingo/pegcode/driver;
 import lab5grammar;
 
 arithGrammarOp: ref Maybe<[PegOp]> = ref None();
@@ -34,12 +34,12 @@ val(e : Expr) -> int {
 
 initGrammar() {
 	onlyOnce(arithGrammarOp, \ -> {
-		compilePegGrammar("#include sandbox/lab5lingo.lingo");
+		compilePegGrammar("#include lab5lingo.lingo");
 	});
 }
 
 main() {
-	result = parsic(initGrammar(), " 1 + 2      *3    ", defaultPegActions);
+	result = parsic(initGrammar(), "3+20*5", defaultPegActions);
 
 	println(result);
 	println(str(result));

@@ -1,6 +1,6 @@
 import string;
 import lingo/pegcode/driver;
-import sandbox/lab6/lab6grammar;
+import lab6grammar;
 
 arithGrammarOp: ref Maybe<[PegOp]> = ref None();
 RPNGrammarOp: ref Maybe<[PegOp]> = ref None();
@@ -17,6 +17,33 @@ str(e : Expr) -> string {
 			"(" + str(l) + " + " + str(r) + ")";
 		}
 	}
+}
+
+pop(stack:ref [?])->? {
+	element = ^stack[length(^stack)-1];
+	stack := subrange(^stack, 0, length(^stack)-1);
+	element;
+}
+
+calc(e: [RpnExpr])->int {
+	r = fold(e, ref [], \stack, exp -> {
+		switch (exp : RpnExpr) {
+			IntConst(c): {refArrayPush(stack, c); stack};
+			Mul(): {refArrayPush(stack, pop(stack) * pop(stack)); stack;}
+			Add(): {refArrayPush(stack, pop(stack) + pop(stack)); stack;}
+		}
+	});
+	pop(r);
+}
+
+printRpn(e:[RpnExpr]) -> string {
+	fold(e, "", \acc, op -> {
+		switch (op : RpnExpr) {
+			IntConst(c): acc + i2s(c);
+			Mul(): acc + "*";
+			Add(): acc + "+";
+		}
+	})
 }
 
 strRPN(e : Expr) -> string {
@@ -49,13 +76,13 @@ val(e : Expr) -> int {
 
 initRPNGrammar() {
 	onlyOnce(RPNGrammarOp, \ -> {
-		compilePegGrammar("#include sandbox/lab6/lab6lingo.lingo");
+		compilePegGrammar("#include lab6lingo.lingo");
 	});
 }
 
 initExprGrammar() {
 	onlyOnce(arithGrammarOp, \ -> {
-		compilePegGrammar("#include sandbox/lab5lingo.lingo");
+		compilePegGrammar("#include lab5lingo.lingo");
 	});
 }
 
@@ -82,8 +109,7 @@ rpn2expr(s : string) -> string {
 }
 
 main() {
-	//println(expr2rpn("1+21*33"));
-	println(rpn2expr("+ * 1 21 33"));
+	println(rpn2expr("1 2 + 3 4 + +"));
 
 	quit(0);
 }

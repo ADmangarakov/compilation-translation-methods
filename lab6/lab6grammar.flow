@@ -1,4 +1,5 @@
-IntConst : (value : int);
-Mul : (left : Expr, right : Expr);
-Add : (left : Expr, right : Expr);
+RpnExpr ::= IntConst, Mul, Add;
 Expr ::= IntConst, Mul, Add;
+IntConst: (value:int);
+Mul: ();
+Add: ();
