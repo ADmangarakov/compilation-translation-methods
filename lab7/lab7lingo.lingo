@@ -1,0 +1,4 @@
+add = mul:left ws "+" ws add:right {Add2(:left, :right)} | mul:only {:only};
+mul = int:left ws "*" ws mul:right {Mul2(:left, :right)} | int:only {:only};
+int = ws ('0'-'9')+$d ws {IntConst2(s2i($d))};
+ws = " "*;

@@ -1,0 +1,41 @@
+import string;
+import lib/lingo/pegcode/driver;
+import lab7gramar;
+
+arithGrammarOp: ref Maybe<[PegOp]> = ref None();
+
+initGrammar() {
+	onlyOnce(arithGrammarOp, \ -> {
+		compilePegGrammar("#include lab7lingo.lingo");
+	});
+}
+
+Rational(n: int, d: int);
+
+rational(a:int)->RationalArith{
+    Rational(a, 1);
+}
+
+parse(source: string) -> Expr{
+    parsic(initGrammar(), source, defaultPegActions);
+}
+
+calcImpl(e: Expr, vars: Tree<string, int>) -> Rational {
+    switch (exp : Type) {
+        Struct(var): {
+            
+        }
+    }
+}
+
+calc(e:Expr, vars: [Pair<string, int>]) -> Rational {
+    calcImpl()
+}
+
+
+main() {
+    var p = parse("a*x*x + b*x + c");
+    v = makeTree();
+    v = tr
+    println(r2str(calc(p), [Pair("x", 1), Pair("a", 0), Pair("b", 1), Pair("c", 2)]));
+}

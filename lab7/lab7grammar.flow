@@ -1,0 +1,8 @@
+Expr ::= IntConst, Mul, Add, Div, Sub, Neg, Var;
+IntConst : (value : int);
+Mul : (left : Expr, right : Expr);
+Add : (left : Expr, right : Expr);
+Div : (left: Expr, right : Expr);
+Sub : (left: Expr, right : Expr);
+Neg : (arg: Expr);
+Var : (name: string)
