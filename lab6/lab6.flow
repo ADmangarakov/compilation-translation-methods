@@ -1,27 +1,29 @@
 import string;
 import lingo/pegcode/driver;
 import lab6grammar;
+import lab5grammar;
 
 arithGrammarOp: ref Maybe<[PegOp]> = ref None();
 RPNGrammarOp: ref Maybe<[PegOp]> = ref None();
 
 str(e : Expr) -> string {
 	switch(e) {
-		IntConst(c) : {
+		IntConst2(c) : {
 			i2s(c);
 		}
-		Mul(l, r) : {
+		Mul2(l, r) : {
 			"(" + str(l) + " * " + str(r) + ")";
 		}
-		Add(l, r) : {
+		Add2(l, r) : {
 			"(" + str(l) + " + " + str(r) + ")";
 		}
 	}
 }
 
-pop(stack:ref [?])->? {
-	element = ^stack[length(^stack)-1];
-	stack := subrange(^stack, 0, length(^stack)-1);
+pop(stack: ref [?])->? {
+	topPos = length(^stack)-1;
+	element = ^stack[topPos];
+	stack := subrange(^stack, 0, topPos);
 	element;
 }
 
@@ -46,33 +48,33 @@ printRpn(e:[RpnExpr]) -> string {
 	})
 }
 
-strRPN(e : Expr) -> string {
+strRPN(e : RpnExpr) -> string {
 	switch(e) {
 		IntConst(c) : {
 			i2s(c);
 		}
-		Mul(l, r) : {
-			"* " + strRPN(l) + " " + strRPN(r);
+		Mul() : {
+			"* ";
 		}
-		Add(l, r) : {
-			"+ " + strRPN(l) + " " + strRPN(r);
+		Add() : {
+			"+ ";
 		}
 	}
 }
 
-val(e : Expr) -> int {
-	switch(e) {
-		IntConst(c) : {
-			c;
-		}
-		Mul(l, r) : {
-			val(l) * val(r);
-		}
-		Add(l, r) : {
-			val(l) + val(r);
-		}
-	}
-}
+// val(e : Expr) -> int {
+// 	switch(e) {
+// 		IntConst(c) : {
+// 			c;
+// 		}
+// 		Mul2(l, r) : {
+// 			val(l) * val(r);
+// 		}
+// 		Add2(l, r) : {
+// 			val(l) + val(r);
+// 		}
+// 	}
+// }
 
 initRPNGrammar() {
 	onlyOnce(RPNGrammarOp, \ -> {
@@ -86,15 +88,15 @@ initExprGrammar() {
 	});
 }
 
-parse(op: [PegOp], s : string) -> Expr {
+parse(op: [PegOp], s : string) -> RpnExpr {
 	parsic(op, s, defaultPegActions);
 }
 
-parseExpr(s : string) -> Expr {
+parseExpr(s : string) -> RpnExpr {
 	parse(initExprGrammar(), s);
 }
 
-parseRPN(s : string) -> Expr {
+parseRPN(s : string) -> RpnExpr {
 	parse(initRPNGrammar(), s);
 }
 

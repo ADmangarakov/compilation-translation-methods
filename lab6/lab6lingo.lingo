@@ -1,5 +1,7 @@
-exp = (mul:m{:m} | add:a{:a} | int:only {:only} ws*)+;
-mul = add:left ws exp:right ws* "*" {Mul(:left, :right)};
-add = int:left ws exp:right ws* "+" {Add(:left, :right)};
-int = ('0'-'9')+$d {IntConst(s2i($d))};
-ws =(' ' | '\r' | '\n' | '\t')+;
+exps = ws exp+;
+exp = mul | add | int;
+mul = '*' ws { Mul() };
+add = '+' ws { Add() };
+int = ws* ('0'-'9')+$d ws* {IntConst(s2i($d))};
+ws = s*;
+s = (' ' | '\r' | '\n' | '\t');

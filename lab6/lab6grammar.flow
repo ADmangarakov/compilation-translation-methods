@@ -1,5 +1,4 @@
 RpnExpr ::= IntConst, Mul, Add;
-Expr ::= IntConst, Mul, Add;
 IntConst: (value:int);
 Mul: ();
 Add: ();

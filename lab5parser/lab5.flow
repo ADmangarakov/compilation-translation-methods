@@ -6,13 +6,13 @@ arithGrammarOp: ref Maybe<[PegOp]> = ref None();
 
 str(e : Expr) -> string {
 	switch(e) {
-		IntConst(c) : {
+		IntConst2(c) : {
 			i2s(c);
 		}
-		Mul(l, r) : {
+		Mul2(l, r) : {
 			"(" + str(l) + " * " + str(r) + ")";
 		}
-		Add(l, r) : {
+		Add2(l, r) : {
 			"(" + str(l) + " + " + str(r) + ")";
 		}
 	}
@@ -20,13 +20,13 @@ str(e : Expr) -> string {
 
 val(e : Expr) -> int {
 	switch(e) {
-		IntConst(c) : {
+		IntConst2(c) : {
 			c;
 		}
-		Mul(l, r) : {
+		Mul2(l, r) : {
 			val(l) * val(r);
 		}
-		Add(l, r) : {
+		Add2(l, r) : {
 			val(l) + val(r);
 		}
 	}
